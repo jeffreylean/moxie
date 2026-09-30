@@ -5,6 +5,7 @@
     reason = "Inherent to Bevy ECS: systems take many params and query tuples."
 )]
 
+mod agent;
 mod catalog;
 mod icons;
 mod materials;

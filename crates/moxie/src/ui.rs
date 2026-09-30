@@ -1,4 +1,5 @@
 mod action;
+mod agent;
 mod assets;
 mod hierarchy;
 mod inspector;
@@ -41,6 +42,7 @@ pub(crate) struct UiPlugin;
 impl Plugin for UiPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((MoxieUiPlugin, timeline::TimelinePlugin))
+            .add_plugins(crate::agent::AgentPlugin)
             .insert_resource(moxie_ui::inspector::FieldAnimatable(
                 Some(|world, field| {
                     Target::of(world, field).is_some_and(|target| {
@@ -76,6 +78,11 @@ impl Plugin for UiPlugin {
             .init_resource::<hierarchy::Dragging>()
             .init_resource::<scene::EditorScene>()
             .add_systems(Startup, setup_editor_ui)
+            .add_systems(
+                PostUpdate,
+                agent::follow_output
+                    .after(bevy::ui::UiSystems::Layout),
+            )
             .add_systems(
                 Update,
                 (
@@ -176,7 +183,12 @@ fn setup_editor_ui(
         tree.set_fraction(hsplit, 0.8);
     }
 
-    tree.split(viewport, Edge::Right, "inspector".into());
+    if let Some((sidebar, inspector_tab)) =
+        tree.split(viewport, Edge::Right, "inspector".into())
+    {
+        tree.add_tab(sidebar, "agent");
+        tree.set_active(sidebar, inspector_tab);
+    }
     if let Some(hsplit) = tree.parent_of(viewport) {
         tree.set_fraction(hsplit, 0.8);
     }
@@ -223,6 +235,14 @@ fn build_editor_ui(ui: &mut BevyUi) {
 
 /// Register the editor's dockable windows.
 fn register_windows(registry: &mut WindowRegistry) {
+    registry.register(DockWindowDescriptor {
+        id: "agent".into(),
+        name: "Agent".into(),
+        icon: None,
+        build: |ui| {
+            ui.compose(agent::AgentPanel);
+        },
+    });
     registry.register(DockWindowDescriptor {
         id: "viewport".into(),
         name: "Viewport".into(),

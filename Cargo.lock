@@ -3792,11 +3792,14 @@ dependencies = [
  "bevy",
  "bevy_fynix",
  "bevy_motiongfx",
+ "crossbeam-channel",
  "fynix",
  "motiongfx_scene",
  "moxie_asset",
  "moxie_ui",
  "rfd",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

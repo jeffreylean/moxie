@@ -1,0 +1,21 @@
+{
+  "name": "@moxie/agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test dist/*.test.js",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@earendil-works/pi-coding-agent": "0.99.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "typescript": "^5.9.3"
+  }
+}

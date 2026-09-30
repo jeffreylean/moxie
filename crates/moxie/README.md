@@ -43,6 +43,12 @@ git submodule update --init --recursive
 cargo run -p moxie
 ```
 
+### Agent tab
+
+The Agent tab uses the Pi Coding Agent SDK through a local
+TypeScript worker. See [agent setup](../../agent/README.md) for
+building the worker, configuring providers, and packaging Node.js.
+
 ## Contributing
 
 Read [`docs/comment_convention.md`](/docs/comment_convention.md) and
